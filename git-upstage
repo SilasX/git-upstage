@@ -1,19 +1,34 @@
 #!/bin/sh
+# git-upstage: create and push a new branch that squashes the
+# current branch to a single commit, back-dated before
+# completion of that branch, then rubs it in with a slimy
+# commit message
 
-# TODO allow command-line input of branch to copy
+# TODO optional command-line input of branch to copy
 # Assumes you're on the branch you want to copy.
 CURRENT_BRANCH=`git branch | awk '/^\*/{print $2}'`
+SLIMY_MESSAGE="Just a quick fix for the whole $CURRENT_BRANCH issue."
 NEW_BRANCH_NAME=quick-${CURRENT_BRANCH}
+TEMP_BRANCH_NAME=temp-${CURRENT_BRANCH}
 
+# Branch that $CURRENT_BRANCH is merging onto
+# TODO optional input this command line
+MERGE_BRANCH=master
+
+# Create temporary branch for easy commit reference
+git checkout -b $TEMP_BRANCH_NAME
 # Copy branch
-git branch $NEW_BRANCH_NAME $CURRENT_BRANCH
-# Check that branch out
-git checkout $NEW_BRANCH_NAME
-# Squash to one commit
-# TODO
+echo "Creating new branch off $MERGE_BRANCH"
+git checkout -b $NEW_BRANCH_NAME $MERGE_BRANCH
+# Squash $CURRENT_BRANCH's commits and stage
+echo "Squashing ${CURRENT_BRANCH} to single commit."
+git merge --squash $TEMP_BRANCH_NAME
+# Make single commit for $CURRENT_BRANCH
+echo "Creating squashed commit message."
+git commit -m "$SLIMY_MESSAGE"
 # Amend message
 # TODO
-# Move name back
+# Move commit time back
 # TODO
 # Push to remote
 # TODO
