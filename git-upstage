@@ -4,9 +4,21 @@
 # completion of that branch, then rubs it in with a slimy
 # commit message
 
+timeback () {
+    # Unix timestamp for latest commit
+    branch_done_time=`git show -s --format=%ct head`
+    secondsback=$1
+    claimed_unix_time=$[${branch_done_time}-${secondsback}]
+    claimed_git_time=`date -r ${claimed_unix_time}`
+    echo $claimed_git_time
+}
+
 # TODO optional command-line input of branch to copy
 # Assumes you're on the branch you want to copy.
 CURRENT_BRANCH=`git branch | awk '/^\*/{print $2}'`
+# Then go back 5 minutes
+
+CLAIMED_TIME=`timeback 300`
 SLIMY_MESSAGE="Just a quick fix for the whole $CURRENT_BRANCH issue."
 NEW_BRANCH_NAME=quick-${CURRENT_BRANCH}
 TEMP_BRANCH_NAME=temp-${CURRENT_BRANCH}
@@ -25,10 +37,6 @@ echo "Squashing ${CURRENT_BRANCH} to single commit."
 git merge --squash $TEMP_BRANCH_NAME
 # Make single commit for $CURRENT_BRANCH
 echo "Creating squashed commit message."
-git commit -m "$SLIMY_MESSAGE"
-# Amend message
-# TODO
-# Move commit time back
+git commit -m "$SLIMY_MESSAGE" --date="$CLAIMED_TIME"
 # TODO
 # Push to remote
-# TODO
