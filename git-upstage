@@ -38,5 +38,7 @@ git merge --squash $TEMP_BRANCH_NAME
 # Make single commit for $CURRENT_BRANCH
 echo "Creating squashed commit message."
 git commit -m "$SLIMY_MESSAGE" --date="$CLAIMED_TIME"
+# Clean up temp branch
+git branch -D $TEMP_BRANCH_NAME
 # TODO
 # Push to remote
