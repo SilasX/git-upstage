@@ -4,6 +4,37 @@
 # completion of that branch, then rubs it in with a slimy
 # commit message
 
+# Defaults to assuming you're on the branch you want to copy.
+CURRENT_BRANCH=`git branch | awk '/^\*/{print $2}'`
+NEW_BRANCH_NAME=quick-${CURRENT_BRANCH}
+# Whether to backdate or otherwise make it look dishonest
+HONEST=0
+# Option handler taken from http://stackoverflow.com/a/14203146/1260665
+while [[ $# -ge 1 ]]
+do
+    key="$1"
+    case $key in
+        -b|--branch)
+            CURRENT_BRANCH="$2"
+            shift
+            ;;
+        -n|--newbranch)
+            NEW_BRANCH_NAME="$2"
+            shift
+            ;;
+        -h|--honest)
+            HONEST="1"
+            ;;
+        *)
+            # unknown option; discard
+        ;;
+    esac
+    shift
+done
+
+echo "Squashing branch $CURRENT_BRANCH to new branch $NEW_BRANCH_NAME"
+git checkout "$CURRENT_BRANCH"
+
 timeback () {
     # Unix timestamp for latest commit
     branch_done_time=`git show -s --format=%ct head`
@@ -13,32 +44,35 @@ timeback () {
     echo $claimed_git_time
 }
 
-# TODO optional command-line input of branch to copy
-# Assumes you're on the branch you want to copy.
-CURRENT_BRANCH=`git branch | awk '/^\*/{print $2}'`
-# Then go back 5 minutes
-
-CLAIMED_TIME=`timeback 300`
-SLIMY_MESSAGE="Just a quick fix for the whole $CURRENT_BRANCH issue."
-NEW_BRANCH_NAME=quick-${CURRENT_BRANCH}
+# Then go back 5 minutes if dishonest
+if [ "$HONEST" = "0" ]
+then
+    CLAIMED_TIME=`timeback 300`
+    SLIMY_MESSAGE="Just a quick fix for the whole $CURRENT_BRANCH issue."
+else
+    CLAIMED_TIME=`timeback 0`
+    SLIMY_MESSAGE="Fix for the $CURRENT_BRANCH issue."
+fi
 TEMP_BRANCH_NAME=temp-${CURRENT_BRANCH}
+echo $SLIMY_MESSAGE
+echo $CLAIMED_TIME
 
 # Branch that $CURRENT_BRANCH is merging onto
 # TODO optional input this command line
-MERGE_BRANCH=master
-
-# Create temporary branch for easy commit reference
-git checkout -b $TEMP_BRANCH_NAME
-# Copy branch
-echo "Creating new branch off $MERGE_BRANCH"
-git checkout -b $NEW_BRANCH_NAME $MERGE_BRANCH
-# Squash $CURRENT_BRANCH's commits and stage
-echo "Squashing ${CURRENT_BRANCH} to single commit."
-git merge --squash $TEMP_BRANCH_NAME
-# Make single commit for $CURRENT_BRANCH
-echo "Creating squashed commit message."
-git commit -m "$SLIMY_MESSAGE" --date="$CLAIMED_TIME"
-# Clean up temp branch
-git branch -D $TEMP_BRANCH_NAME
-# TODO
-# Push to remote
+##MERGE_BRANCH=master
+##
+### Create temporary branch for easy commit reference
+##git checkout -b $TEMP_BRANCH_NAME
+### Copy branch
+##echo "Creating new branch off $MERGE_BRANCH"
+##git checkout -b $NEW_BRANCH_NAME $MERGE_BRANCH
+### Squash $CURRENT_BRANCH's commits and stage
+##echo "Squashing ${CURRENT_BRANCH} to single commit."
+##git merge --squash $TEMP_BRANCH_NAME
+### Make single commit for $CURRENT_BRANCH
+##echo "Creating squashed commit message."
+##git commit -m "$SLIMY_MESSAGE" --date="$CLAIMED_TIME"
+### Clean up temp branch
+##git branch -D $TEMP_BRANCH_NAME
+### TODO
+### Push to remote

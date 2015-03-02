@@ -14,9 +14,23 @@ Let's say that Mike Diligent has made three difficult commits on a new brnach of
 
 7e1ee98 Dishonest John     Thu Feb 26 22:23:50 2015 -0800  Just a quick fix for the whole frontend-refactor issue.
 
+## Options
+
+    -b, --branch BRANCHNAME
+
+The branch that you wish to squash.  Default: current branch.
+
+    -n, --newbranch NEWBRANCHNAME
+
+The name of the new branch created by this.  Default: `quick-CB`, where `CB` is the name of the branch you're on at the time the command is run.
+
+    -h, --honest
+
+Don't backdate commit.  (Still claims credit for it though.)
+
 ## Installation
 
-Copy `git-upstage` to any folder on your `$PATH`.
+Copy `git-upstage` to any folder on your `$PATH` and make sure it's executable.
 
 ## Usage
 
