@@ -12,7 +12,7 @@ Let's say that Mike Diligent has made three difficult commits on a new brnach of
 
 `git-upstage` would then create a new branch, `quick-frontend-refactor`, containing one commit, dated five minutes before `d5bef31`, with a smarmy commit message as follows:
 
-7e1ee98 Dishonest John     Thu Feb 26 22:23:50 2015 -0800  Just a quick fix for the whole frontend-refactor issue.
+    7e1ee98 Dishonest John     Thu Feb 26 22:23:50 2015 -0800  Just a quick fix for the whole frontend-refactor issue.
 
 ## Options
 
