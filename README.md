@@ -4,7 +4,7 @@
 
 ## Example:
 
-Let's say that Mike Diligent has made three difficult commits on a new brnach off of master, called `frontend-refactor`.
+Let's say that Mike Diligent has made three difficult commits on a new branch off of master, called `frontend-refactor`.
 
     d5bef31 Mike Diligent     Thu Feb 26 22:28:50 2015 -0800  Third dose of work.
     af66c53 Mike Diligent     Thu Feb 26 20:23:29 2015 -0800  Even more work.
