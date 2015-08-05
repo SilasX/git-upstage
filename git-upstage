@@ -59,20 +59,20 @@ echo $CLAIMED_TIME
 
 # Branch that $CURRENT_BRANCH is merging onto
 # TODO optional input this command line
-##MERGE_BRANCH=master
-##
-### Create temporary branch for easy commit reference
-##git checkout -b $TEMP_BRANCH_NAME
-### Copy branch
-##echo "Creating new branch off $MERGE_BRANCH"
-##git checkout -b $NEW_BRANCH_NAME $MERGE_BRANCH
-### Squash $CURRENT_BRANCH's commits and stage
-##echo "Squashing ${CURRENT_BRANCH} to single commit."
-##git merge --squash $TEMP_BRANCH_NAME
-### Make single commit for $CURRENT_BRANCH
-##echo "Creating squashed commit message."
-##git commit -m "$SLIMY_MESSAGE" --date="$CLAIMED_TIME"
-### Clean up temp branch
-##git branch -D $TEMP_BRANCH_NAME
-### TODO
-### Push to remote
+MERGE_BRANCH=master
+
+# Create temporary branch for easy commit reference
+git checkout -b $TEMP_BRANCH_NAME
+# Copy branch
+echo "Creating new branch off $MERGE_BRANCH"
+git checkout -b $NEW_BRANCH_NAME $MERGE_BRANCH
+# Squash $CURRENT_BRANCH's commits and stage
+echo "Squashing ${CURRENT_BRANCH} to single commit."
+git merge --squash $TEMP_BRANCH_NAME
+# Make single commit for $CURRENT_BRANCH
+echo "Creating squashed commit message."
+git commit -m "$SLIMY_MESSAGE" --date="$CLAIMED_TIME"
+# Clean up temp branch
+git branch -D $TEMP_BRANCH_NAME
+# TODO
+# Push to remote
